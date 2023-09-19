@@ -1,4 +1,5 @@
-import axios from 'axios';
+const axios = require('axios');
+const {ENGINE, OPENAI_API_KEY} = require("@env");
 
 export function multiply(a: number, b: number): Promise<number> {
   return Promise.resolve(a * b);
@@ -6,7 +7,7 @@ export function multiply(a: number, b: number): Promise<number> {
 
 export async function ask(age: number, question: string): Promise<string> {
   const prompt: string = JSON.stringify({
-    model: process.env.ENGINE || "gpt-3.5-turbo",
+    model: ENGINE || "gpt-3.5-turbo",
     messages: [
       {
         role: "system",
@@ -17,7 +18,7 @@ export async function ask(age: number, question: string): Promise<string> {
   return axios
     .post("https://api.openai.com/v1/chat/completions", prompt, {
       headers: {
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
         "Content-Type": "application/json",
       },
     })

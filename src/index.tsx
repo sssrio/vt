@@ -22,11 +22,11 @@ export async function ask(age: number, question: string): Promise<string> {
         "Content-Type": "application/json",
       },
     })
-    .then((res) => {
+    .then((res: any) => {
       const result : string = res.data.choices[0].message.content;
       return result.replace(/\n\n/g, "\n");
     })
-    .catch((e) => {
+    .catch((e: any) => {
       console.log("error generating response", e.message)
       return '';
     });

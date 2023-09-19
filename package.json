@@ -1,6 +1,6 @@
 {
   "name": "react-native-vt",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Enabling AI Chat for ReactNative applications using ChatGPT",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",

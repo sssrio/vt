@@ -1,15 +1,19 @@
 import axios from 'axios';
-
+const fetch = require('node-fetch');
 var studenAge:number = 0;
 var openAiApiKey:string = "";
+var result: string = "";
 
-export default (apiKey: string, age: number) => {
-  if(!apiKey || !age){
+export default (options:any) => {
+  console.log(options)
+  if(!options.apiKey || !options.age){
+    console.log(options.apiKey,options.age)
     throw new Error("Initialization failed! Please check documentation")
   }
-  studenAge = age;
-  openAiApiKey = apiKey;
-  const ask = async (question: string): Promise<string> => {
+  studenAge = options.age;
+  openAiApiKey = options.apiKey;
+
+  const ask = async (question: string): Promise<object> => {
     const prompt: string = JSON.stringify({
       model: "gpt-3.5-turbo",
       messages: [
@@ -26,13 +30,40 @@ export default (apiKey: string, age: number) => {
           "Content-Type": "application/json",
         },
       })
-      .then((res: any) => {
-        const result : string = res.data.choices[0].message.content;
-        return result.replace(/\n\n/g, "\n");
+      .then(async(res: any) => {
+        result = res.data.choices[0].message.content;
+        result = result.replace(/\n\n/g, "\n");
+        
+        // if(options.mode.toLowerCase() === "audio"){
+        //   console.log("generating audio")
+        //   const config = {
+        //     method: 'POST',
+        //     headers: {
+        //       accept: 'text/event-stream', 
+        //       'content-type': 'application/json',
+        //       Authorization:`Bearer ${options.playHTKey}`,
+        //       'X-USER-ID': options.playHTUserId
+        //     },
+        //     body: JSON.stringify({
+        //       text: result,
+        //       voice: 'larry',
+        //       quality: 'medium',
+        //       output_format: 'mp3',
+        //       speed: 0.8,
+        //       sample_rate: 24000
+        //     })
+        //   };
+          
+        //   fetch("https://play.ht/api/v2/tts", config)
+        //     .then(res => {console.log(res); return res.json()})
+        //     .then(json => console.log({json}))
+        //     .catch(err => console.error('error:' + err));
+        // }
+        return {text: result, audio: ""}
       })
       .catch((e: any) => {
         console.log("\x1b[43m","\x1b[34m","\x1b[1m",":: VirtualTeacher :: ","\x1b[0m","\n\t\x1b[31m","\x1b[1m","error generating response,", e.message, "\x1b[0m")
-        return '';
+        return {text: "", audio: ""}
       });
   }
   return {

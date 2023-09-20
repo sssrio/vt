@@ -1,5 +1,5 @@
 import axios from 'axios';
-const fetch = require('node-fetch');
+// const fetch = require('node-fetch');
 var studenAge:number = 0;
 var openAiApiKey:string = "";
 var result: string = "";
